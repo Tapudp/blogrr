@@ -152,3 +152,39 @@
   here comes the **React Life Cycle Method**, it is a function on a react class that is automatically called by react
   we need `ComponentDidMount`
  - `componentWillMount` will not work nicely because as the react is eager to render the component but the API fetching may take time asynchronously to fetch the data before the component mounts on the dom
+
+### Redndering a list of posts
+ - set up a new article in the POSTMAN API software and then POST it. Then reload our app see it in the network tab and XHR we would be able to see the posts 
+  ```
+  function mapStateToProps(state) {
+    return { posts: state.posts };
+  }
+  ```
+
+ and then also hook up the mapStateToProps function to the connect middleware
+ ```
+ export default connect(mapStateToProps, { fetchPosts })(PostsIndex);
+ ```
+ - add the following:
+ ```
+ renderPosts() {
+   return _.map(this.props.posts, post => {
+     return (
+       <li className="list-group-item">
+        { post.title }
+       </li>
+     )
+   });
+ }
+
+ render() {
+  return(
+    <div>
+      <h3>Posts</h3>
+      <ul className="list-group">
+        { this.renderPosts() }
+      </ul>
+    </div>
+  )
+ }
+ ```
