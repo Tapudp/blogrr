@@ -127,3 +127,28 @@
   case FETCH_POSTS:
     return _.mapKeys(action.payload.data, 'id');
   ```
+
+### Action Creator shortcuts
+ - wireup the fetch_posts action creator to the fetch_posts component
+  ```
+  import { connect } from 'react-redux';
+  import { fetchPosts } from '../actions';
+  ```
+
+  here the connect helper we have always used with `mapDispatchToProps` to have the action creator directly into the component so we can call it off to a props object
+  here we are going to use another way kind of shortcut to wireup the action creator 
+
+  so instead of `mapStateToProps` argument we will have `null` since we are not having it.
+  and in the second argument rather than passing `mapDispatchToProps` function we can directly pass in the action creator itself inside of an object :p
+  ```
+  export default connect(null, { fetchPosts: fetchPosts })(PostsIndex);
+  ```
+  but with **ES6** 
+  ```
+  export default connect(null, { fetchPosts })(PostsIndex);
+  ```
+ - a real question is *when are we going to call the action creator to call the api and reach our api to fetch the posts* may be some click, hover events.
+  so as soon as the `PostsIndex` component renders we want it to reach out to the API and fetch the posts 
+  here comes the **React Life Cycle Method**, it is a function on a react class that is automatically called by react
+  we need `ComponentDidMount`
+ - `componentWillMount` will not work nicely because as the react is eager to render the component but the API fetching may take time asynchronously to fetch the data before the component mounts on the dom
