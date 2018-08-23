@@ -188,3 +188,15 @@
   )
  }
  ```
+
+### Creating new Posts
+ - Scaffold PostsNew component
+ - Add route configuration
+ - Add navigation between Index and New
+ - Add form to PostsNew
+ - Make action creator to save post 
+ - but after adding the new posts_new component in the main app it shows all the index components as well
+
+### React router Gotcha
+ - { Switch } component takes in a collection of different routes, it takes in a colleciton of different routes
+ - and we need to put the root route at the end of the list
