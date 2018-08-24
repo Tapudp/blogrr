@@ -200,3 +200,13 @@
 ### React router Gotcha
  - { Switch } component takes in a collection of different routes, it takes in a colleciton of different routes
  - and we need to put the root route at the end of the list
+
+### Navigation with Link Component
+ - use Link component inside posts_index component so that 
+ ```
+ <div className="text xs-right>
+  <Link className="btn btn-primary" to="/posts/new">
+    Add new Posts
+  </Link>
+ </div>
+ ```
