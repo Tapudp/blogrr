@@ -210,3 +210,21 @@
   </Link>
  </div>
  ```
+ it does render as an anchor tag on the dom, so it is React-router's anchor and it must be used like one.
+
+### Redux forms
+ - in /posts/new the user will put in all the different data and hit save so we need the blog API to save it and redirect to the homepage of the app.
+ - so building form will be complicated because we have many input fields here and we want to validate each of the input field we are gonna use conditional library called `redux-forms' it is all about handling any type of FORM that we put together with redux, validating the input and then submitting the form in some fashion
+ - install it with npm module and look at the docs on github
+ - import the reducer from the redux form, it uses our instance of store so it wires up some action creators and reducers that we might have to look at.
+ - in /reducer/index.js 
+ ```
+ import { reducer as formReducer } from 'redux-form';
+ ```
+ so we are just using alias formReducer for our reducer form and add it to the common RootReducer
+ ```
+ const rootReducer = combineReducers({
+   posts: postReducer,
+   form : formReducer
+ })
+ ```
