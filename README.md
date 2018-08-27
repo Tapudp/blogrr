@@ -424,4 +424,27 @@
  ```
  don't forget to pass in the values
 
-#### The request must be made with values in the second argument in the action creator createPosts function
+  #### The request must be made with values in the second argument in the action creator createPosts function
+
+### Navigation through callbacks
+ - so whenever React router's <Route> component renders our component according to the paths it will also pass on many other props as well so one of them is `history` so we need to put in 
+ ```
+ this.props.history.push('/');
+ ```
+ in our `onSubmit` function 
+ - but it only just redirects to homepage without even completing the post operation and then on the index page the newly created post doesn't appear so we need to basically use callbacks to have the first operation compelete itself and then only render with the new post in the list. so it would look like following
+ ```
+ onSubmit(values){
+   this.props.createPost(values, () => {
+     this.props.history.push('/');
+   })
+ }
+ ```
+
+ and also in the action creator after the request happens we need to define, axios.post returns a promise so we can use .then()
+ ```
+ export function createPost(values, callback) {
+   const request = axios.post(`${ROOT_URL}/posts${API_KEY}`, values)
+                        .then(() => callback());
+ ....}
+ ```
