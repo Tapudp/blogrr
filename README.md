@@ -367,3 +367,59 @@
  ```
  and again we can remove all the meta from the called things
  also remove the hard codded css class name and add the variable that we have defined
+
+### Navigation again
+ - so in the /components/posts_new.js we have to make the navigation possible to 
+ ```
+ import { Link } from 'react-router';
+
+ <Link to='/' className="btn btn-danger">Cancel</Link>
+ ```
+ also add some css so two buttons don't look sandwiched together so the /style/style.css would be following
+ ```
+ form a {
+   margin-left: 5px;
+ }
+ ```
+ because <Link> tags are basicaly anchor tags 
+ **css still can't be linked to the main file**
+
+### Create post action creator
+ - in /actions/index.js we need to create a new action-creator function
+ ```
+ export const CREATE_POSTS = 'create_posts
+
+ export default createPosts(values) {
+   const request = axios.post(`${ROOT_URL}/posts${API_KEY}`);
+
+   return {
+     type: CREATE_POSTS,
+     payload: request
+   }
+ }
+ ```
+ the values object passed into the action function so that it knows what to post 
+ - so now only need to check in the reducer where state is actually an object where the keys are id of the posts and values are the actual posts themselves so **leave the reducer as it is**
+
+ - and now in the /components/posts_new.js call the action creator and import the connect helper as well
+ ```
+ import { connect } from 'react-redux';
+ import { createPosts } from './actions';
+
+ export default reduxForm({
+   validate,
+   form: 'PostsNewForm'
+ })(
+   connect(null, { createPost })(PostsNew)
+ );
+ ```
+ and at the bottom we already have redux-form helper so we are gonna put the connect helper inside it as the second argument; this is how to stack up multiple connect like helpers
+
+ the createPost action creator does return a react component
+ - in the `onSubmit` function call the action creator the so the action takes place
+ ```
+ onSubmit(values){
+   this.props.createPost(values);
+ }
+ ```
+ don't forget to pass in the values

@@ -14,8 +14,6 @@ class PostsIndex extends Component {
          return (
             <li className = "list-group-item" key={ post.id } >
                { post.title }
-               <p> { post.content } </p>
-               <small> { post.categories } </small>
             </li>
          )
       });
