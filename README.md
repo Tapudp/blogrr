@@ -320,3 +320,22 @@
  - we need to get the error messages to show up so we can reference the field object 
  - so in the renderField function we need to add {field.meta.error}
  - the error object looks at the Field components name property so the errors.title is intended
+
+### Handling Form submittal
+ - create a submit button (obvioulsy! :p)
+ - `onSubmit` function in the form itself , **reduxForm only handle the state and validation part of our form**, it is not responsible for things like taking data and saving in some form
+  basically `onSubmit` will have some code from the redux-form and some of our own code
+ ```
+ onSubmit(values){
+   console.log(values);
+ }
+
+ const { handleSubmit } = this.props;
+
+ onSubmit = { handleSubmit(this.onSubmit.bind(this)) }
+ ```
+ when we wire up the redux-form it passes ton of additional properties to our redux-form, so the `handleSubmit` was passed from redux-form to this component so that's why we started it as this.props
+
+ - so first handleSubmit() is from redux-form and it first validates make sure if everything is working perfectly and then it calls the `onSubmit` function that we have defined
+ - we bind the onSubmit because we wanted it into the context of our component
+
