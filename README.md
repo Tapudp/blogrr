@@ -423,3 +423,5 @@
  }
  ```
  don't forget to pass in the values
+
+#### The request must be made with values in the second argument in the action creator createPosts function
