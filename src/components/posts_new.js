@@ -11,6 +11,7 @@ class PostsNew extends Component {
                type="text"
                {...field.input}
             />
+            {field.meta.error}
          </div>
       )
    }
@@ -24,8 +25,8 @@ class PostsNew extends Component {
                component = {this.renderField}
             />
             <Field
-               label="Tags"
-               name="tags"
+               label="categories"
+               name="categories"
                component={ this.renderField }
             />
             <Field
@@ -38,7 +39,27 @@ class PostsNew extends Component {
    }
 }
 
+function validate() {
+   const errors = {};
+
+   // validate the inputs from 'values'
+   if(!values.title){
+      errors.title = "Enter a value!";
+   }
+
+   if(!values.categories){
+      errors.categories = "Enter some categories";
+   }
+
+   if(!values.content){
+      errors.content = "Enter some content please";
+   }
+
+   return errors;
+}
+
 export default reduxForm({
+   validate, //validate: validate ES6 key: values same so we can write only one
    form: 'PostsNewForm'
 })(PostsNew);
 

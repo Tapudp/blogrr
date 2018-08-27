@@ -304,9 +304,19 @@
 
  - the thre dots(.) are for the object there and all of its properties in that object to be communicated as props to the input tag
 
-### 84 Generalizing field
+### Generalizing field
  - give input field label as well
  - create another field for tags(categories)
  - no need to separated functions for various fields just a generalized one with `renderField` and just put them in the component properties of the Fields
  - so we should pass arbitrary properties for particular Field component that we want to render for. and have the label in the renderField function as `{ field.title }` so that it renders particular thing for that particular Field
  - create a new 'Content` Field
+
+### Validating form
+ - tags are categories actually so changed it
+ - create a validate function and give it in as a configuration to the redux-form
+ - the validate function is in the configuration so it will be called by the redux-form once the form is filled up and if the error object is empty then it is validated otherwise it will give out the errors
+
+### Showing errors to users
+ - we need to get the error messages to show up so we can reference the field object 
+ - so in the renderField function we need to add {field.meta.error}
+ - the error object looks at the Field components name property so the errors.title is intended
