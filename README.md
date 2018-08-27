@@ -339,3 +339,10 @@
  - so first handleSubmit() is from redux-form and it first validates make sure if everything is working perfectly and then it calls the `onSubmit` function that we have defined
  - we bind the onSubmit because we wanted it into the context of our component
 
+### Form and Field States
+ - errors only needs to be displayed when it is going to happen so in the renderField helper and add a ternary conditional to the `{field.meta.error}`
+ ```
+ { field.meta.touched ? field.meta.error : '' }
+ ```
+ empty string at the end
+ - now just needed a bit of styling with css
