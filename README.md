@@ -346,3 +346,24 @@
  ```
  empty string at the end
  - now just needed a bit of styling with css
+
+### Conditional Styling
+ - add `has-danger`to renderField helpers div element where className is already form-group
+ - also add 
+ ```
+ <div className="text-help">
+  { field.meta.touched ? field.meta.error : '' }
+ </div>
+ ```
+ - so for better code organization we will have this in renderField helper
+ ```
+ const className = `form-group ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`;
+ ```
+ we can create another `const { meta } = field` and remove all the field term that has been called
+
+ so we can do more structuring by
+ ```
+ const { meta: { touched, error } } = field;
+ ```
+ and again we can remove all the meta from the called things
+ also remove the hard codded css class name and add the variable that we have defined
