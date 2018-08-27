@@ -448,3 +448,81 @@
                         .then(() => callback());
  ....}
  ```
+
+### New posts_show component
+ - /components/posts_show and import it in index.js
+ - don't forget to put the Router path of /posts/:id after the /posts/new because order matters here
+ - so create a new action creator 
+ ```
+ export const FETCH_POST = 'fetch_post';
+ export function fetchPost(id){
+   const request = axios.get(`${ROOT_URL}/posts/${id}#{API_KEY}`);
+
+   return {
+     type: FETCH_POST,
+     payload: request
+   }
+ }
+ ```
+ - now also add the action creator in the reducer_posts file.
+ ```
+ import { FETCH_POSTS, FETCH_POST } from '../actions';
+
+ export default function (state = {}, action){
+   switch(action.type){
+      case FETCH_POST:
+        const post = action.payload.data;
+        const newState = { ...state };
+        newState[post.id] = post;
+        return newState;
+   }
+ }
+ ```
+
+### Selecting from own props
+ - in the /components/posts_show.js
+ ```
+ import { connect } from 'react-redux';
+ import { fetchPost } from '../actions';
+
+ class PostsShow extends Component {
+   componentDidMount(){
+     this.props.match.params.id;
+     this.props.fetchPost();
+   }
+
+   render(){
+     return(
+       <div> Posts Show! </div>
+     )
+   }
+ }
+ 
+ function mapStateToProps({ posts }){
+
+ }
+
+ export default connect(null, { fetchPost })(PostsShow);
+ ```
+ we are trying to fetch a particular id of the post so in the mapStateToProps({ posts }), so we don't want to work with big list of posts but only with a particular id of post
+
+ - so we can use a token which provided to us from the URL; **react-router provides directly this from the url**
+ ```
+ componentDidMount(){
+   // this.props.match.params.id;
+   const { id } = this.props.match.params;
+   this.props.fetchPost(id);
+ }
+ ```
+ - params object will hold all the given wild card parameters in the url, so here we only need the id one that's why we called it
+ - so there is no need to pass the whole posts object and then derive to one single post that we care about but we need to figure out a way to get a single post
+ ```
+ function mapStateToProps({ posts }, ownProps){ ... }
+ ```
+ ownProps is the by convention we call in ownProps, it is headed/going to the component specified in that class
+
+### Data Dependencies
+ - after setting up the mapStateToProps and also set it up in the connect helper we just need to render
+ - `can not read title of undefined` we have the things defined in our reducer but it still making that undefined effect 
+ - the flow goes like this we first try to fetch the post from the api then the redux connector and mapStateToProps looks at it and tries to map the single post as wrote in the code, but this is asynchronous operation so until this gets completed we need to render that it is **Loading...**
+ - so put an if condition for the same and as soon as the api fetches it our component will render.
