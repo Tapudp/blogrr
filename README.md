@@ -526,3 +526,75 @@
  - `can not read title of undefined` we have the things defined in our reducer but it still making that undefined effect 
  - the flow goes like this we first try to fetch the post from the api then the redux connector and mapStateToProps looks at it and tries to map the single post as wrote in the code, but this is asynchronous operation so until this gets completed we need to render that it is **Loading...**
  - so put an if condition for the same and as soon as the api fetches it our component will render.
+
+### Caching records
+ - create a Link tag to navigate back to posts index, so import it in the post_show itself.
+ - add the link tag again inside of our post_index component so that on clicking a particular post title it will take us to that particular post
+ - add the posts id in the link inside the renderPosts helper in posts_index file
+ ```
+ <Link to={`/posts/${post.id}`}>
+  { post.title }
+ </Link>
+ ```
+ - also if we are so tightly constrained on network fetching then we should just not fetch each post individually and take it from the list of posts while all of the were fetched from the API. But put it in a conditional because we don't know since how long the user has been sitting on the index page.
+ so in posts_show put the componentdidMount()'s content in an if conditional if needed.
+
+### Deleting a post
+ - a button to render in posts_show to delete that particular post
+ ```
+ onDeleteClick(){
+   const { id } = this.props.match.params;
+   this.props.deletePost(id);
+ }
+
+ <button
+  className = "btn btn-danger pull-xs-right"
+  onClick = {this.onDeleteClick.bind(this)} 
+ >
+ Delete Post
+ </button>
+ ```
+ again get the id from the params object that has been given to us by react-router
+
+ - we can even put it like `this.props.deletePost(this.props.post.id)` but since the post itself takes time to get fetched and then render the button might say that it was undefined initially so it is safer to look at the react-router's params object and take the id to delete
+
+ - here we worked backward so don't forget to import the deletePost action creator and then create it in the action creator itself also add it in the `connect` helper at the bottom
+ - delete Action creator
+ ```
+ export const DELETE_POST = 'delete_post';
+
+ export function deletePost(id, callback){
+   const request = axios.delete(`${ROOT_URL}/posts/${id}${API_KEY}`)
+                        .then(() => callback());
+   return {
+     type: DELETE_POST,
+     payload: id
+   }
+ }
+ ```
+ - and also add following in the post_show onDeleteClick function
+ ```
+ import { fetchPost, deletePost } from '../actions';
+
+ onDeleteClick(){
+   const { id } = this.props.match.params;
+
+   this.props.deletePost(id, () => {
+     this.props.history.push('/');
+   });
+ }
+
+ export default connect(mapStateToProps, { fetchPost, deletePost }))(PostsShow);
+ ```
+
+ - so now even after deleting the post the post still remains in the state/reducer so we need to define another switch case to make it remove from there as well. so in our reducer file
+ ```
+ case DELETE_POST:
+  return _.omit(state, action.payload);
+ ```
+
+### Wrap up - Conclusion
+ - this react-redux app used a reducers, action creators to create posts, and delete them and we also used react-router inside our actionCreators with history object
+ - ownProps system, with mapStateToProps, it is the 2nd argument so it is the set of props that is going to the target component
+ so it makes mapStateToProps really great to do some intermediate level of calculation
+ - in the reducers with fetch_post, we made it easier to take all of our existing state and add in the additional record to that object as well. so we keep going back to the same post over and over the key post existing inside our state object is just getting over-written by `[action.payload.data.id]: action.payload.data`
